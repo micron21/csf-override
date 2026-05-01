@@ -19,9 +19,18 @@ chmod +x ioc_checksessions_files.sh
 
 # If compromised:
 
+## Running CSF:
+
 ```
 chmod +x csfoverride.sh
 
 ./csfoverride.sh
 ```
 
+## Running I360:
+
+```
+chmod +x 360override.sh
+
+./360override.sh
+```
