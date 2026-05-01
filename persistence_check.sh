@@ -27,3 +27,10 @@ lastlog | grep 2026
 # Open Connections
 netstat -antp | grep ESTABLISHED | grep 443
 netstat -antpu | grep ESTABLISHED | grep 53
+
+# Investigate Processes - a lot of false positives probably
+pstree -ap
+lsof -i -n -P
+
+# Search for shells (takes a long time)
+grep -R --line-number -E "nc -e|/bin/sh|/bin/bash|bash -i|python -c|perl -e|php -r|/dev/tcp|socat|mkfifo" / 2>/dev/null
