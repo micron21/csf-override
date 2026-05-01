@@ -34,3 +34,11 @@ chmod +x 360override.sh
 
 ./360override.sh
 ```
+
+## IPTables Last Resort:
+
+```
+chmod +x iptablesoverride.sh
+
+./iptablesoverride.sh
+```
