@@ -113,4 +113,5 @@ else
     log "    4. Check for persistence mechanisms (cron, SSH keys, backdoors)"
     log ""
     uptime
+    who
 fi
