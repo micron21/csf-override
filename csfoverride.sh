@@ -3,7 +3,10 @@
 set -e
 
 CSF_DIR="/etc/csf"
-
+echo "[*] Backing up csf.confs..."
+cp "${CSF_DIR}/csf.conf" "${CSF_DIR}/csf.conf.backup"
+cp "${CSF_DIR}/csf.allow" "${CSF_DIR}/csf.allow.backup"
+cp "${CSF_DIR}/csf.deny" "${CSF_DIR}/csf.deny.backup"
 echo "[*] Writing minimal csf.conf..."
 
 cat > "${CSF_DIR}/csf.conf" <<'EOF'
