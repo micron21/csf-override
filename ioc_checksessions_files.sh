@@ -104,6 +104,8 @@ if [ "$COMPROMISED" -eq 0 ]; then
 else
     log ""
     log $(ls -laht /var/cpanel/sessions/raw/)
+    log "    PURGING ALL SESSIONS"
+    rm -rf /var/cpanel/sessions/raw/*
     log "[!] INDICATORS OF COMPROMISE DETECTED - IMMEDIATE ACTION REQUIRED"
     log "    1. Purge all affected sessions"
     log "    2. Force password reset for root and all WHM users"
