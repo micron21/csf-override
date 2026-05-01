@@ -5,7 +5,7 @@ SESSIONS_DIR="/var/cpanel/sessions"
 
 COMPROMISED=0
 log() {
-  local LOGFILE="/var/log/myscript.log"
+  local LOGFILE="./2026ioc.log"
   local TS
   TS=$(date '+%Y-%m-%d %H:%M:%S')
   printf "[%s] %s\n" "$TS" "$*" | tee -a "$LOGFILE"
