@@ -13,6 +13,12 @@ cat > "${CSF_DIR}/csf.conf" <<'EOF'
 # Minimal CSF configuration - deny everything
 
 TESTING = "0"
+IPTABLES = "/usr/sbin/iptables"
+IPTABLES_SAVE = "/usr/sbin/iptables-save"
+IPTABLES_RESTORE = "/usr/sbin/iptables-restore"
+IP6TABLES = "/usr/sbin/ip6tables"
+IP6TABLES_SAVE = "/usr/sbin/ip6tables-save"
+IP6TABLES_RESTORE = "/usr/sbin/ip6tables-restore"
 
 # Disable all inbound/outbound ports
 TCP_IN = ""
