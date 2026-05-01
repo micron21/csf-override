@@ -38,6 +38,10 @@ echo "[*] Allowing established connections..."
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
+echo "[*] Allowing HTTP/HTTPS traffic..."
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
 echo "[*] Allowing traffic to/from $ALLOWED_IP_1..."
 iptables -A INPUT -s "$ALLOWED_IP_1" -j ACCEPT
 iptables -A OUTPUT -d "$ALLOWED_IP_1" -j ACCEPT
