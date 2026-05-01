@@ -21,7 +21,7 @@ IP6TABLES_SAVE = "/usr/sbin/ip6tables-save"
 IP6TABLES_RESTORE = "/usr/sbin/ip6tables-restore"
 
 # Disable all inbound/outbound ports
-TCP_IN = ""
+TCP_IN = "80,443"
 TCP_OUT = ""
 UDP_IN = ""
 UDP_OUT = ""
