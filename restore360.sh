@@ -1,0 +1,16 @@
+
+#!/bin/bash
+
+set -e
+
+BACKUP_DIR="/root/iptables-backup"
+$BACKUP_DIR/iptables-$TIMESTAMP.rules
+echo "[*] Restoring latest iptables backup rules..."
+
+LATEST=$(ls -1t "$BACKUP_DIR"/iptables-*.rules 2>/dev/null | head -n 1)
+iptables-restore < "$LATEST"
+
+echo "[*] Restarting Imunify360..."
+systemctl start imunify360 || true
+
+echo "[✓] Firewall restored."
