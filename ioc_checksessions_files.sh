@@ -2,9 +2,16 @@
 # Scan for compromised session files
 
 SESSIONS_DIR="/var/cpanel/sessions"
-COMPROMISED=0
 
-echo "[*] Scanning session files for injection indicators..."
+COMPROMISED=0
+log() {
+  local LOGFILE="/var/log/myscript.log"
+  local TS
+  TS=$(date '+%Y-%m-%d %H:%M:%S')
+  printf "[%s] %s\n" "$TS" "$*" | tee -a "$LOGFILE"
+}
+
+log "[*] Scanning session files for injection indicators..."
 
 for session_file in "$SESSIONS_DIR"/raw/*; do
     [ -f "$session_file" ] || continue
@@ -45,32 +52,32 @@ for session_file in "$SESSIONS_DIR"/raw/*; do
         # High confidence if origin is badpass (session was pre-auth)
         if grep -q '^origin_as_string=.*method=badpass' "$session_file"; then
                 if [ -z "$external_auth" ] && [ -z "$used" ]; then
-                        echo "Found possible injected session file: $session_file"
-                        echo "  - No sign of usage"
+                        log "Found possible injected session file: $session_file"
+                        log "  - No sign of usage"
                 else
-                    echo "[!] CRITICAL: Exploitation artifact - token_denied with injected cp_security_token: $session_file"
-                    echo "    - cp_security_token=$token_val"
-                    echo "    - token_denied=$denied_val"
-                    echo "    - origin=$origin"
-                    echo "    - Verdict: Session was pre-auth (badpass origin) with attacker-injected token"
-                    echo "    - USED:  $used"
+                    log "[!] CRITICAL: Exploitation artifact - token_denied with injected cp_security_token: $session_file"
+                    log "    - cp_security_token=$token_val"
+                    log "    - token_denied=$denied_val"
+                    log "    - origin=$origin"
+                    log "    - Verdict: Session was pre-auth (badpass origin) with attacker-injected token"
+                    log "    - USED:  $used"
                     COMPROMISED=1
                 fi
         # Medium confidence but still suspicious for any session
         else
-            echo "[!] WARNING: Suspicious session with token_denied + cp_security_token: $session_file"
-            echo "    - cp_security_token=$token_val"
-            echo "    - token_denied=$denied_val"
-            echo "    - origin=$origin"
-            echo "    - Review manually: may be legitimate token expiration or exploitation attempt"
+            log "[!] WARNING: Suspicious session with token_denied + cp_security_token: $session_file"
+            log "    - cp_security_token=$token_val"
+            log "    - token_denied=$denied_val"
+            log "    - origin=$origin"
+            log "    - Review manually: may be legitimate token expiration or exploitation attempt"
         fi
     fi
 
     # IOC 1: Pre-auth session with authenticated attributes
     if [ -f "$preauth_file" ]; then
         if grep -qE '^successful_external_auth_with_timestamp=' "$session_file"; then
-            echo "[!] CRITICAL: Injected session detected: $session_file"
-            echo "    - Contains 'successful_external_auth_with_timestamp' in pre-auth session"
+            log "[!] CRITICAL: Injected session detected: $session_file"
+            log "    - Contains 'successful_external_auth_with_timestamp' in pre-auth session"
             COMPROMISED=1
         fi
     fi
@@ -80,25 +87,26 @@ for session_file in "$SESSIONS_DIR"/raw/*; do
        ! grep -q '^origin_as_string=.*method=handle_form_login' "$session_file" && \
        ! grep -q '^origin_as_string=.*method=create_user_session' "$session_file" && \
        ! grep -q '^origin_as_string=.*method=handle_auth_transfer' "$session_file"; then
-        echo "[!] WARNING: Session with tfa_verified but suspicious origin: $session_file"
+        log "[!] WARNING: Session with tfa_verified but suspicious origin: $session_file"
         COMPROMISED=1
     fi
 
     # IOC 3: Password field containing newlines (corrupted session file)
     if grep -qzP '(?m)^pass=.*\n.' "$session_file" 2>/dev/null; then
-        echo "[!] CRITICAL: Multi-line pass value detected: $session_file"
+        log "[!] CRITICAL: Multi-line pass value detected: $session_file"
         COMPROMISED=1
     fi
 done
 
 if [ "$COMPROMISED" -eq 0 ]; then
-    echo ""
-    echo "[+] No indicators of compromise found."
+    log ""
+    log "[+] No indicators of compromise found."
 else
-    echo ""
-    echo "[!] INDICATORS OF COMPROMISE DETECTED - IMMEDIATE ACTION REQUIRED"
-    echo "    1. Purge all affected sessions"
-    echo "    2. Force password reset for root and all WHM users"
-    echo "    3. Audit /var/log/wtmp and WHM access logs for unauthorized access"
-    echo "    4. Check for persistence mechanisms (cron, SSH keys, backdoors)"
+    log ""
+    log $(ls -laht /var/cpanel/sessions/raw/)
+    log "[!] INDICATORS OF COMPROMISE DETECTED - IMMEDIATE ACTION REQUIRED"
+    log "    1. Purge all affected sessions"
+    log "    2. Force password reset for root and all WHM users"
+    log "    3. Audit /var/log/wtmp and WHM access logs for unauthorized access"
+    log "    4. Check for persistence mechanisms (cron, SSH keys, backdoors)"
 fi
