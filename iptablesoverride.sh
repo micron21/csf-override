@@ -2,7 +2,10 @@
 
 set -e
 
-ALLOWED_IP="119.31.228.10"
+ALLOWED_IP_1="119.31.228.10"
+ALLOWED_IP_2="119.31.228.158"
+ALLOWED_IP_3="119.31.226.9"
+ALLOWED_IP_4="119.31.226.11"
 BACKUP_DIR="/root/iptables-backup"
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 
@@ -32,8 +35,17 @@ echo "[*] Allowing established connections..."
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-echo "[*] Allowing traffic to/from $ALLOWED_IP..."
-iptables -A INPUT -s "$ALLOWED_IP" -j ACCEPT
-iptables -A OUTPUT -d "$ALLOWED_IP" -j ACCEPT
+echo "[*] Allowing traffic to/from $ALLOWED_IP_1..."
+iptables -A INPUT -s "$ALLOWED_IP_1" -j ACCEPT
+iptables -A OUTPUT -d "$ALLOWED_IP_1" -j ACCEPT
+echo "[*] Allowing traffic to/from $ALLOWED_IP_2..."
+iptables -A INPUT -s "$ALLOWED_IP_2" -j ACCEPT
+iptables -A OUTPUT -d "$ALLOWED_IP_2" -j ACCEPT
+echo "[*] Allowing traffic to/from $ALLOWED_IP_3..."
+iptables -A INPUT -s "$ALLOWED_IP_3" -j ACCEPT
+iptables -A OUTPUT -d "$ALLOWED_IP_3" -j ACCEPT
+echo "[*] Allowing traffic to/from $ALLOWED_IP_4..."
+iptables -A INPUT -s "$ALLOWED_IP_4" -j ACCEPT
+iptables -A OUTPUT -d "$ALLOWED_IP_4" -j ACCEPT
 
-echo "[✓] Firewall locked down to $ALLOWED_IP only."
+echo "[✓] Firewall locked down to $ALLOWED_IP_1 , $ALLOWED_IP_2 , $ALLOWED_IP_3, and $ALLOWED_IP_4 only."
