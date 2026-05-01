@@ -104,6 +104,7 @@ if [ "$COMPROMISED" -eq 0 ]; then
 else
     log ""
     log $(ls -laht /var/cpanel/sessions/raw/)
+    log $(grep ^ip_address /var/cpanel/sessions/raw/*)
     log "    PURGING ALL SESSIONS"
     rm -rf /var/cpanel/sessions/raw/*
     log "[!] INDICATORS OF COMPROMISE DETECTED - IMMEDIATE ACTION REQUIRED"
