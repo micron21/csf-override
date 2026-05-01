@@ -111,4 +111,6 @@ else
     log "    2. Force password reset for root and all WHM users"
     log "    3. Audit /var/log/wtmp and WHM access logs for unauthorized access"
     log "    4. Check for persistence mechanisms (cron, SSH keys, backdoors)"
+    log ""
+    uptime
 fi
