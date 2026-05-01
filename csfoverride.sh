@@ -43,6 +43,8 @@ cat > "${CSF_DIR}/csf.allow" <<'EOF'
 # Only allowed IPs
 119.31.228.10
 119.31.228.158
+119.31.226.9
+119.31.226.11
 EOF
 
 echo "[*] Writing csf.deny..."
