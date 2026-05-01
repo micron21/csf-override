@@ -53,7 +53,8 @@ EOF
 
 echo "[*] Restarting CSF..."
 
-csf -x   # stop
-csf -e   # start
+csf -e   # start if disabled
+csf -r   # restart
+csf -l   # list
 
 echo "[✓] CSF locked down."
