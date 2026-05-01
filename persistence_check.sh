@@ -6,6 +6,9 @@ set -e
 crontab -l
 find /etc/cron* -mtime -4 -type f
 
+# New Executables
+find /tmp /var/tmp /dev/shm /root -type f -mtime -4 -executable -ls
+
 # Modified SSH Access
 find /home/*/.ssh/authorized_keys -type f -mtime -4
 find /home/*/.ssh/authorized_keys2 -type f -mtime -4
